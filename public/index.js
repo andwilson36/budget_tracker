@@ -152,7 +152,7 @@ function sendTransaction(isAdding) {
     amountEl.value = "";
   });
 }
-
+// indexdb record
 saveRecord = (obj) => {
   const db = request.result;
   const transaction = db.transaction(["transactions"], "readwrite");
