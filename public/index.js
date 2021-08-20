@@ -1,6 +1,15 @@
 let transactions = [];
 let myChart;
 
+const request = window.indexedDB.open("transactions", 1);
+
+request.onupgradeneeded = ({ target }) => {
+  const db = target.result;
+
+  const objectStore = db.createObjectStore("transactions");
+  objectStore.createIndex("transactions");
+};
+
 fetch("/api/transaction")
   .then(response => {
     return response.json();
@@ -142,6 +151,16 @@ function sendTransaction(isAdding) {
     nameEl.value = "";
     amountEl.value = "";
   });
+}
+
+saveRecord = (obj) => {
+  const db = request.result;
+  const transaction = db.transaction(["transactions"], "readwrite");
+
+  var request = objectStore.add(obj);
+  request.onsuccess = function(event) {
+    console.log("save record")
+  };
 }
 
 document.querySelector("#add-btn").onclick = function() {
